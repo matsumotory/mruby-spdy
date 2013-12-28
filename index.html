@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Mruby-spdy by matsumoto-r</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Mruby-spdy</h1>
+          <h2>SPDY Module for mruby</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/matsumoto-r/mruby-spdy/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/matsumoto-r/mruby-spdy/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/matsumoto-r/mruby-spdy" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="spdy-module-for-mruby" class="anchor" href="#spdy-module-for-mruby"><span class="octicon octicon-link"></span></a>SPDY Module for mruby</h1>
+
+<p>mruby spdy module</p>
+
+<h2>
+<a name="install-by-mrbgems" class="anchor" href="#install-by-mrbgems"><span class="octicon octicon-link"></span></a>install by mrbgems</h2>
+
+<ul>
+<li>Download</li>
+</ul><pre><code>git clone https://github.com/mruby/mruby.git
+git clone https://github.com/matsumoto-r/mruby-spdy.git
+</code></pre>
+
+<ul>
+<li>spdylay build</li>
+</ul><pre><code>cd mruby-spdy
+git submodule init
+git submodule update
+cd src/spdylay
+autoreconf -i
+automake
+autoconf
+./configure
+make
+cd ../../../
+</code></pre>
+
+<ul>
+<li>add conf.gem line to <code>build_config.rb</code>
+</li>
+</ul><pre><code>cd mruby
+</code></pre>
+
+<div class="highlight highlight-ruby"><pre><span class="no">MRuby</span><span class="o">::</span><span class="no">Build</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">conf</span><span class="o">|</span>
+
+  <span class="c1"># ... (snip) ...</span>
+
+  <span class="n">conf</span><span class="o">.</span><span class="n">gem</span> <span class="s1">'../mruby-spdy'</span>
+<span class="k">end</span>
+</pre></div>
+
+<ul>
+<li>build</li>
+</ul><pre><code>rake
+</code></pre>
+
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>example</h2>
+
+<div class="highlight highlight-ruby"><pre><span class="no">SPDY</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">get</span> <span class="s1">'https://www.google.co.jp/'</span>
+</pre></div>
+
+<ul>
+<li>response</li>
+</ul><div class="highlight highlight-ruby"><pre><span class="p">{</span>
+    <span class="ss">:syn_reply</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="ss">:"x-frame-options"</span><span class="o">=&gt;</span><span class="s2">"SAMEORIGIN"</span><span class="p">,</span> 
+        <span class="ss">:"x-xss-protection"</span><span class="o">=&gt;</span><span class="s2">"1; mode=block"</span><span class="p">,</span> 
+        <span class="ss">:expires</span><span class="o">=&gt;</span><span class="s2">"-1"</span><span class="p">,</span> 
+        <span class="ss">:p3p</span><span class="o">=&gt;</span><span class="s2">"CP=</span><span class="se">\"</span><span class="s2">This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&amp;answer=151657 for more info.</span><span class="se">\"</span><span class="s2">"</span><span class="p">,</span> 
+        <span class="ss">:server</span><span class="o">=&gt;</span><span class="s2">"gws"</span><span class="p">,</span> 
+        <span class="ss">:"set-cookie"</span><span class="o">=&gt;</span><span class="s2">"; expires=Sun, 29-Jun-2014 17:16:55 GMT; path=/; domain=.google.co.jp; HttpOnly"</span><span class="p">,</span> 
+        <span class="ss">:":version"</span><span class="o">=&gt;</span><span class="s2">"HTTP/1.1"</span><span class="p">,</span> 
+        <span class="ss">:"alternate-protocol"</span><span class="o">=&gt;</span><span class="s2">"443:quic"</span><span class="p">,</span> 
+        <span class="ss">:"cache-control"</span><span class="o">=&gt;</span><span class="s2">"private, max-age=0"</span><span class="p">,</span> 
+        <span class="ss">:"content-type"</span><span class="o">=&gt;</span><span class="s2">"text/html; charset=Shift_JIS"</span><span class="p">,</span> 
+        <span class="ss">:date</span><span class="o">=&gt;</span><span class="s2">"Sat, 28 Dec 2013 17:16:55 GMT"</span><span class="p">,</span> 
+        <span class="ss">:":status"</span><span class="o">=&gt;</span><span class="s2">"200 OK"</span>
+    <span class="p">},</span> 
+    <span class="ss">:recieve_bytes</span><span class="o">=&gt;</span><span class="mi">953</span><span class="o">.</span><span class="mi">0</span><span class="p">,</span> 
+    <span class="ss">:body</span><span class="o">=&gt;</span><span class="s2">"&lt;html&gt; - (snip) - &lt;/html&gt;"</span><span class="p">,</span> 
+    <span class="ss">:body_length</span><span class="o">=&gt;</span><span class="mi">953</span><span class="p">,</span> 
+    <span class="ss">:spdy_proto_version</span><span class="o">=&gt;</span><span class="mi">4</span><span class="p">,</span> 
+    <span class="ss">:stream_id</span><span class="o">=&gt;</span><span class="mi">1</span><span class="p">,</span> 
+    <span class="ss">:syn_stream</span><span class="o">=&gt;</span><span class="p">{</span>
+        <span class="ss">:":method"</span><span class="o">=&gt;</span><span class="s2">"GET"</span><span class="p">,</span> 
+        <span class="ss">:":path"</span><span class="o">=&gt;</span><span class="s2">"/"</span><span class="p">,</span> 
+        <span class="ss">:":scheme"</span><span class="o">=&gt;</span><span class="s2">"https"</span><span class="p">,</span> 
+        <span class="ss">:":version"</span><span class="o">=&gt;</span><span class="s2">"HTTP/1.1"</span><span class="p">,</span> 
+        <span class="ss">:":host"</span><span class="o">=&gt;</span><span class="s2">"www.google.co.jp"</span><span class="p">,</span> 
+        <span class="ss">:accept</span><span class="o">=&gt;</span><span class="s2">"*/*"</span><span class="p">,</span> 
+        <span class="ss">:"user-agent"</span><span class="o">=&gt;</span><span class="s2">"mruby-spdy/0.0.1"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div>
+
+<h1>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h1>
+
+<p>under the MIT License:</p>
+
+<ul>
+<li><a href="http://www.opensource.org/licenses/mit-license.php">http://www.opensource.org/licenses/mit-license.php</a></li>
+</ul>
+        </section>
+
+        <footer>
+          Mruby-spdy is maintained by <a href="https://github.com/matsumoto-r">matsumoto-r</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
