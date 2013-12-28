@@ -1,6 +1,13 @@
 # SPDY Module for mruby
 SPDY module for mruby. You can access Web site using SPDY protocol from mruby applications or devices with mruby.
 
+## TODO
+This mrbgem is very early version.
+- replace uri parser to mruby-http
+- implement some method (post...)
+- implement some class (Server, Proxy...)
+- write spdy callback function by Ruby block
+
 ## example
 - SPDY by mruby
 
