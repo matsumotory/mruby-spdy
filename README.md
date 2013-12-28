@@ -1,6 +1,10 @@
 # SPDY Module for mruby  [![Build Status](https://travis-ci.org/matsumoto-r/mruby-spdy.png?branch=master)](https://travis-ci.org/matsumoto-r/mruby-spdy)
 SPDY module for mruby. You can access Web site using SPDY protocol from mruby applications or devices with mruby.
 
+- [SPDY: An experimental protocol for a faster web](http://www.chromium.org/spdy/spdy-whitepaper) 
+
+    As part of the "Let's make the web faster" initiative, we are experimenting with alternative protocols to help reduce the latency of web pages. One of these experiments is SPDY (pronounced "SPeeDY"), an application-layer protocol for transporting content over the web, designed specifically for minimal latency.
+
 ## TODO
 This mrbgem is very early version.
 - replace uri parser to mruby-http
