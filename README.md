@@ -1,4 +1,4 @@
-# SPDY Module for mruby
+# SPDY Module for mruby  [![Build Status](https://travis-ci.org/matsumoto-r/mruby-spdy.png?branch=master)](https://travis-ci.org/matsumoto-r/mruby-spdy)
 SPDY module for mruby. You can access Web site using SPDY protocol from mruby applications or devices with mruby.
 
 ## TODO
