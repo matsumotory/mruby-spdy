@@ -1,1 +1,1 @@
-SPDY::Client.get 'https://www.google.co.jp/'
+p SPDY::Client.get 'https://www.google.co.jp/'
