@@ -665,7 +665,7 @@ void mrb_mruby_spdy_gem_init(mrb_state *mrb)
 
   spdy = mrb_define_module(mrb, "SPDY");
   client = mrb_define_class_under(mrb, spdy, "Client", mrb->object_class);
-  mrb_define_class_method(mrb, client, "get", mrb_spdy_client_get, ARGS_REQ(1));
+  mrb_define_class_method(mrb, client, "spdy_get", mrb_spdy_client_get, ARGS_REQ(1));
 
   DONE;
 }
