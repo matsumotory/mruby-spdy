@@ -204,7 +204,7 @@ static void on_ctrl_send_callback(spdylay_session *session, spdylay_frame_type t
   if(name && spdylay_session_get_stream_user_data(session, stream_id)) {
     syn_stream = mrb_hash_new(conn->mrb);
     for(i = 0; nv[i]; i += 2) {
-      mrb_hash_set(conn->mrb, syn_stream, mrb_symbol_value(mrb_intern_cstr(conn->mrb, nv[i])), mrb_str_new_cstr(conn->mrb, nv[i+1]));
+      mrb_hash_set(conn->mrb, syn_stream, mrb_str_new_cstr(conn->mrb, nv[i]), mrb_str_new_cstr(conn->mrb, nv[i+1]));
     }
     mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "syn_stream")), syn_stream);
   }
@@ -242,7 +242,7 @@ static void on_ctrl_recv_callback(spdylay_session *session, spdylay_frame_type t
     mrb_spdy_check_gzip(conn->mrb, req, nv);
     syn_reply = mrb_hash_new(conn->mrb);
     for(i = 0; nv[i]; i += 2) {
-      mrb_hash_set(conn->mrb, syn_reply, mrb_symbol_value(mrb_intern_cstr(conn->mrb, nv[i])), mrb_str_new_cstr(conn->mrb, nv[i+1]));
+      mrb_hash_set(conn->mrb, syn_reply, mrb_str_new_cstr(conn->mrb, nv[i]), mrb_str_new_cstr(conn->mrb, nv[i+1]));
     }
     mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "syn_reply")), syn_reply);
   }
