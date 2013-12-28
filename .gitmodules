@@ -1,0 +1,3 @@
+[submodule "spdylay"]
+	path = src/spdylay
+	url = https://github.com/tatsuhiro-t/spdylay.git
