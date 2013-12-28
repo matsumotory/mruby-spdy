@@ -1,5 +1,5 @@
 # SPDY Module for mruby
-SPDY module for mruby. You can access Web site using SPDY protocol by mruby.
+SPDY module for mruby. You can access Web site using SPDY protocol from mruby applications or devices with mruby.
 
 ## example
 ```ruby
