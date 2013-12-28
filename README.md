@@ -2,6 +2,8 @@
 SPDY module for mruby. You can access Web site using SPDY protocol from mruby applications or devices with mruby.
 
 ## example
+- SPDY by mruby
+
 ```ruby
 r = SPDY::Client.get 'https://www.google.co.jp/'
 
