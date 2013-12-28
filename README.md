@@ -6,7 +6,7 @@ SPDY module for mruby. You can access Web site using SPDY protocol from mruby ap
     As part of the "Let's make the web faster" initiative, we are experimenting with alternative protocols to help reduce the latency of web pages. One of these experiments is SPDY (pronounced "SPeeDY"), an application-layer protocol for transporting content over the web, designed specifically for minimal latency.
 
 ## TODO
-This mrbgem is very early version.
+This is a very early version, please test and report errors. Wellcome pull-request.
 - replace uri parser to mruby-http
 - implement some method (post...)
 - implement some class (Server, Proxy...)
