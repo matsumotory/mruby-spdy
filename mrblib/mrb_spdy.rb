@@ -13,7 +13,6 @@ module SPDY
     def body_length; @response[:body_length]; end
     def spdy_version; @response[:spdy_proto_version]; end
     def stream_id; @response[:stream_id]; end
-    def stream_id; @response[:stream_id]; end
     def syn_reply; @response[:syn_reply]; end
     def syn_stream; @response[:syn_stream]; end
   end
