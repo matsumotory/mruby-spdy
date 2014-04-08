@@ -7,15 +7,13 @@ before_install:
 install:
   - sudo apt-get -qq install rake bison git gperf
 before_script:
-  - cd src/spdylay
-  - autoreconf -i
-  - automake
-  - autoconf
-  - ./configure
-  - make
-  - cd ../../../
+  - cd ../
   - git clone https://github.com/mruby/mruby.git
   - cd mruby
   - cp -fp ../mruby-spdy/.travis_build_config.rb build_config.rb
 script: 
   - rake all test
+notifications:
+  webhooks:
+    - https://idobata.io/hook/f48e8f58-29d9-414e-8336-1fadb62bfa2d
+
