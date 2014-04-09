@@ -101,39 +101,14 @@ r.syn_stream
 ```
 
 ## install by mrbgems
- - Download
-
-```
-git clone https://github.com/mruby/mruby.git
-git clone https://github.com/matsumoto-r/mruby-spdy.git
-```
-
- - spdylay build
-
-```
-cd mruby-spdy
-git submodule init
-git submodule update
-cd src/spdylay
-autoreconf -i
-automake
-autoconf
-./configure
-make
-cd ../../../
-```
-
  - add conf.gem line to `build_config.rb`
 
-```
-cd mruby
-```
 ```ruby
 MRuby::Build.new do |conf|
 
   # ... (snip) ...
 
-  conf.gem '../mruby-spdy'
+  conf.gem :github => 'matsumoto-r/mruby-spdy'
 end
 ```
 
