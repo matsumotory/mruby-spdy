@@ -101,7 +101,8 @@ static char *strcopy(const char *s, size_t len)
   return dst;
 }
 
-static void mrb_spdy_check_gzip(mrb_state *mrb, struct mrb_spdy_request_t *req, char **nv)
+static void mrb_spdy_check_gzip(mrb_state *mrb, struct mrb_spdy_request_t *req, 
+    char **nv)
 {
   int gzip = 0;
   size_t i;
@@ -123,7 +124,8 @@ static void mrb_spdy_check_gzip(mrb_state *mrb, struct mrb_spdy_request_t *req, 
   }
 }
 
-static ssize_t send_callback(spdylay_session *session, const uint8_t *data, size_t length, int flags, void *user_data)
+static ssize_t send_callback(spdylay_session *session, const uint8_t *data, 
+    size_t length, int flags, void *user_data)
 {
   struct mrb_spdy_conn_t *conn;
   ssize_t rv;
@@ -144,7 +146,8 @@ static ssize_t send_callback(spdylay_session *session, const uint8_t *data, size
   return rv;
 }
 
-static ssize_t recv_callback(spdylay_session *session, uint8_t *buf, size_t length, int flags, void *user_data)
+static ssize_t recv_callback(spdylay_session *session, uint8_t *buf, 
+    size_t length, int flags, void *user_data)
 {
   struct mrb_spdy_conn_t *conn;
   ssize_t rv;
@@ -167,7 +170,8 @@ static ssize_t recv_callback(spdylay_session *session, uint8_t *buf, size_t leng
   return rv;
 }
 
-static void before_ctrl_send_callback(spdylay_session *session, spdylay_frame_type type, spdylay_frame *frame, void *user_data)
+static void before_ctrl_send_callback(spdylay_session *session, 
+    spdylay_frame_type type, spdylay_frame *frame, void *user_data)
 {   
   struct mrb_spdy_conn_t *conn;
   conn = (struct mrb_spdy_conn_t*)user_data;
@@ -178,12 +182,15 @@ static void before_ctrl_send_callback(spdylay_session *session, spdylay_frame_ty
     req = spdylay_session_get_stream_user_data(session, stream_id);
     if(req && req->stream_id == -1) {
       req->stream_id = stream_id;
-      mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "stream_id")), mrb_fixnum_value(stream_id));
+      mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(
+          mrb_intern_cstr(conn->mrb, "stream_id")), 
+          mrb_fixnum_value(stream_id));
     }
   }
 }
 
-static void on_ctrl_send_callback(spdylay_session *session, spdylay_frame_type type, spdylay_frame *frame, void *user_data)
+static void on_ctrl_send_callback(spdylay_session *session, 
+    spdylay_frame_type type, spdylay_frame *frame, void *user_data)
 {
   struct mrb_spdy_conn_t *conn;
   conn = (struct mrb_spdy_conn_t*)user_data;
@@ -204,13 +211,16 @@ static void on_ctrl_send_callback(spdylay_session *session, spdylay_frame_type t
   if(name && spdylay_session_get_stream_user_data(session, stream_id)) {
     syn_stream = mrb_hash_new(conn->mrb);
     for(i = 0; nv[i]; i += 2) {
-      mrb_hash_set(conn->mrb, syn_stream, mrb_str_new_cstr(conn->mrb, nv[i]), mrb_str_new_cstr(conn->mrb, nv[i+1]));
+      mrb_hash_set(conn->mrb, syn_stream, mrb_str_new_cstr(conn->mrb, nv[i]), 
+          mrb_str_new_cstr(conn->mrb, nv[i+1]));
     }
-    mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "syn_stream")), syn_stream);
+    mrb_hash_set(conn->mrb, conn->response, 
+        mrb_symbol_value(mrb_intern_cstr(conn->mrb, "syn_stream")), syn_stream);
   }
 }
 
-static void on_ctrl_recv_callback(spdylay_session *session, spdylay_frame_type type, spdylay_frame *frame, void *user_data)
+static void on_ctrl_recv_callback(spdylay_session *session, 
+    spdylay_frame_type type, spdylay_frame *frame, void *user_data)
 {
   struct mrb_spdy_conn_t *conn;
   conn = (struct mrb_spdy_conn_t*)user_data;
@@ -242,13 +252,16 @@ static void on_ctrl_recv_callback(spdylay_session *session, spdylay_frame_type t
     mrb_spdy_check_gzip(conn->mrb, req, nv);
     syn_reply = mrb_hash_new(conn->mrb);
     for(i = 0; nv[i]; i += 2) {
-      mrb_hash_set(conn->mrb, syn_reply, mrb_str_new_cstr(conn->mrb, nv[i]), mrb_str_new_cstr(conn->mrb, nv[i+1]));
+      mrb_hash_set(conn->mrb, syn_reply, mrb_str_new_cstr(conn->mrb, nv[i]), 
+          mrb_str_new_cstr(conn->mrb, nv[i+1]));
     }
-    mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "syn_reply")), syn_reply);
+    mrb_hash_set(conn->mrb, conn->response, 
+        mrb_symbol_value(mrb_intern_cstr(conn->mrb, "syn_reply")), syn_reply);
   }
 }
 
-static void on_stream_close_callback(spdylay_session *session, int32_t stream_id, spdylay_status_code status_code, void *user_data)
+static void on_stream_close_callback(spdylay_session *session, 
+    int32_t stream_id, spdylay_status_code status_code, void *user_data)
 {
   struct mrb_spdy_conn_t *conn;
   conn = (struct mrb_spdy_conn_t*)user_data;
@@ -259,14 +272,16 @@ static void on_stream_close_callback(spdylay_session *session, int32_t stream_id
     int rv;
     rv = spdylay_submit_goaway(session, SPDYLAY_GOAWAY_OK);
     if(rv != 0) {
-      mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_submit_goaway: %S", mrb_fixnum_value(rv));
+      mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_submit_goaway: %S", 
+          mrb_fixnum_value(rv));
     }
   }
 }
 
 #define MAX_OUTLEN 4096
 
-static void on_data_chunk_recv_callback(spdylay_session *session, uint8_t flags, int32_t stream_id, const uint8_t *data, size_t len, void *user_data)
+static void on_data_chunk_recv_callback(spdylay_session *session, uint8_t flags, 
+    int32_t stream_id, const uint8_t *data, size_t len, void *user_data)
 {
   struct mrb_spdy_conn_t *conn;
   conn = (struct mrb_spdy_conn_t*)user_data;
@@ -274,7 +289,8 @@ static void on_data_chunk_recv_callback(spdylay_session *session, uint8_t flags,
   char *body;
   req = spdylay_session_get_stream_user_data(session, stream_id);
   if(req) {
-    mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "recieve_bytes")), mrb_float_value(conn->mrb, (float)len));
+    mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(
+        conn->mrb, "recieve_bytes")), mrb_float_value(conn->mrb, (float)len));
     body = NULL;
     if(req->inflater) {
       while(len > 0) {
@@ -300,21 +316,26 @@ static void on_data_chunk_recv_callback(spdylay_session *session, uint8_t flags,
     } else {
       body = strcopy((char *)data, len);
     }
-    mrb_value body_data = mrb_hash_get(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "body")));
+    mrb_value body_data = mrb_hash_get(conn->mrb, conn->response, 
+        mrb_symbol_value(mrb_intern_cstr(conn->mrb, "body")));
     mrb_value body_len;
     if (!mrb_nil_p(body_data)) {
-      mrb_str_concat(conn->mrb, body_data, mrb_str_new_cstr(conn->mrb, (char *)body));
+      mrb_str_concat(conn->mrb, body_data, mrb_str_new_cstr(conn->mrb, 
+          (char *)body));
     }
     else {
       body_data = mrb_str_new_cstr(conn->mrb, (char *)body);
     }
     body_len = mrb_fixnum_value(strlen(body));
-    mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "body")), body_data);
-    mrb_hash_set(conn->mrb, conn->response, mrb_symbol_value(mrb_intern_cstr(conn->mrb, "body_length")), body_len);
+    mrb_hash_set(conn->mrb, conn->response, 
+        mrb_symbol_value(mrb_intern_cstr(conn->mrb, "body")), body_data);
+    mrb_hash_set(conn->mrb, conn->response, 
+        mrb_symbol_value(mrb_intern_cstr(conn->mrb, "body_length")), body_len);
   }
 }
 
-static void mrb_spdy_setup_spdylay_callbacks(mrb_state *mrb, spdylay_session_callbacks *callbacks)
+static void mrb_spdy_setup_spdylay_callbacks(mrb_state *mrb, 
+    spdylay_session_callbacks *callbacks)
 {
   memset(callbacks, 0, sizeof(spdylay_session_callbacks));
   callbacks->send_callback = send_callback;
@@ -326,13 +347,16 @@ static void mrb_spdy_setup_spdylay_callbacks(mrb_state *mrb, spdylay_session_cal
   callbacks->on_data_chunk_recv_callback = on_data_chunk_recv_callback;
 }
 
-static int select_next_proto_cb(SSL* ssl, unsigned char **out, unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg)
+static int select_next_proto_cb(SSL* ssl, unsigned char **out, 
+    unsigned char *outlen, const unsigned char *in, unsigned int inlen, 
+    void *arg)
 {
   int rv;
   uint16_t *spdy_proto_version;
   rv = spdylay_select_next_protocol(out, outlen, in, inlen);
   if(rv <= 0) {
-    fprintf(stderr, "FATAL: %s\n", "Server did not advertise spdy/2 or spdy/3 protocol.");
+    fprintf(stderr, "FATAL: %s\n", 
+        "Server did not advertise spdy/2 or spdy/3 protocol.");
     exit(EXIT_FAILURE);
   }
   spdy_proto_version = (uint16_t*)arg;
@@ -340,7 +364,8 @@ static int select_next_proto_cb(SSL* ssl, unsigned char **out, unsigned char *ou
   return SSL_TLSEXT_ERR_OK;
 }
 
-static void mrb_spdy_init_ssl_ctx(mrb_state *mrb, SSL_CTX *ssl_ctx, uint16_t *spdy_proto_version)
+static void mrb_spdy_init_ssl_ctx(mrb_state *mrb, SSL_CTX *ssl_ctx, 
+    uint16_t *spdy_proto_version)
 {
   SSL_CTX_set_options(ssl_ctx, SSL_OP_ALL|SSL_OP_NO_SSLv2);
   SSL_CTX_set_mode(ssl_ctx, SSL_MODE_AUTO_RETRY);
@@ -353,12 +378,14 @@ static void mrb_spdy_ssl_handshake(mrb_state *mrb, SSL *ssl, int fd)
 {
   int rv;
   if(SSL_set_fd(ssl, fd) == 0) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_set_fd: %S", mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_set_fd: %S", 
+        mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
   }
   ERR_clear_error();
   rv = SSL_connect(ssl);
   if(rv <= 0) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_connect: %S", mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_connect: %S", 
+        mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
   }
 }
 
@@ -375,15 +402,16 @@ static int mrb_spdy_connect_to(mrb_state *mrb, const char *host, uint16_t port)
   hints.ai_socktype = SOCK_STREAM;
   rv = getaddrinfo(host, service, &hints, &res);
   if(rv != 0) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "getaddrinfo: %S", mrb_str_new_cstr(mrb, gai_strerror(rv)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "getaddrinfo: %S", 
+        mrb_str_new_cstr(mrb, gai_strerror(rv)));
   }
   for(rp = res; rp; rp = rp->ai_next) {
     fd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
     if(fd == -1) {
       continue;
     }
-    while((rv = connect(fd, rp->ai_addr, rp->ai_addrlen)) == -1 &&
-          errno == EINTR);
+    while((rv = connect(fd, rp->ai_addr, rp->ai_addrlen)) == -1 
+        && errno == EINTR);
     if(rv == 0) {
       break;
     }
@@ -399,11 +427,13 @@ static void mrb_spdy_make_non_block(mrb_state *mrb, int fd)
   int flags, rv;
   while((flags = fcntl(fd, F_GETFL, 0)) == -1 && errno == EINTR);
   if(flags == -1) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "fcntl: %S", mrb_str_new_cstr(mrb, strerror(errno)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "fcntl: %S", 
+        mrb_str_new_cstr(mrb, strerror(errno)));
   }
   while((rv = fcntl(fd, F_SETFL, flags | O_NONBLOCK)) == -1 && errno == EINTR);
   if(rv == -1) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "fcntl: %S", mrb_str_new_cstr(mrb, strerror(errno)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "fcntl: %S", 
+        mrb_str_new_cstr(mrb, strerror(errno)));
   }
 }
 
@@ -413,11 +443,13 @@ static void mrb_spdy_set_tcp_nodelay(mrb_state *mrb, int fd)
   int rv;
   rv = setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &val, (socklen_t)sizeof(val));
   if(rv == -1) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "setsockopt: %S", mrb_str_new_cstr(mrb, strerror(errno)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "setsockopt: %S", 
+        mrb_str_new_cstr(mrb, strerror(errno)));
   }
 }
 
-static void mrb_spdy_ctl_poll(mrb_state *mrb, struct pollfd *pollfd, struct mrb_spdy_conn_t *conn)
+static void mrb_spdy_ctl_poll(mrb_state *mrb, struct pollfd *pollfd, 
+    struct mrb_spdy_conn_t *conn)
 {
   pollfd->events = 0;
   if(spdylay_session_want_read(conn->session) ||
@@ -430,7 +462,8 @@ static void mrb_spdy_ctl_poll(mrb_state *mrb, struct pollfd *pollfd, struct mrb_
   }
 }
 
-static void mrb_spdy_submit_request(mrb_state *mrb, struct mrb_spdy_conn_t *conn, struct mrb_spdy_request_t *req)
+static void mrb_spdy_submit_request(mrb_state *mrb, 
+    struct mrb_spdy_conn_t *conn, struct mrb_spdy_request_t *req)
 {
   int pri = 0;
   int rv;
@@ -445,7 +478,8 @@ static void mrb_spdy_submit_request(mrb_state *mrb, struct mrb_spdy_conn_t *conn
   nv[14] = NULL;
   rv = spdylay_submit_request(conn->session, pri, nv, NULL, req);
   if(rv != 0) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_submit_request: %S", mrb_fixnum_value(rv));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_submit_request: %S", 
+        mrb_fixnum_value(rv));
   }
 }
 
@@ -454,15 +488,18 @@ static void mrb_spdy_exec_io(mrb_state *mrb, struct mrb_spdy_conn_t *conn)
   int rv;
   rv = spdylay_session_recv(conn->session);
   if(rv != 0) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_session_recv: %S", mrb_fixnum_value(rv));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_session_recv: %S", 
+        mrb_fixnum_value(rv));
   }
   rv = spdylay_session_send(conn->session);
   if(rv != 0) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_session_send: %S", mrb_fixnum_value(rv));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_session_send: %S", 
+        mrb_fixnum_value(rv));
   }
 }
 
-static void mrb_spdy_request_init(mrb_state *mrb, struct mrb_spdy_request_t *req, const struct mrb_spdy_uri_t *uri)
+static void mrb_spdy_request_init(mrb_state *mrb, 
+    struct mrb_spdy_request_t *req, const struct mrb_spdy_uri_t *uri)
 {
   req->host = strcopy(uri->host, uri->hostlen);
   req->port = uri->port;
@@ -472,7 +509,8 @@ static void mrb_spdy_request_init(mrb_state *mrb, struct mrb_spdy_request_t *req
   req->inflater = NULL;
 }
 
-static void mrb_spdy_request_free(mrb_state *mrb, struct mrb_spdy_request_t *req)
+static void mrb_spdy_request_free(mrb_state *mrb, 
+    struct mrb_spdy_request_t *req)
 {
   free(req->host);
   free(req->path);
@@ -480,7 +518,8 @@ static void mrb_spdy_request_free(mrb_state *mrb, struct mrb_spdy_request_t *req
   spdylay_gzip_inflate_del(req->inflater);
 }
 
-static mrb_value mrb_spdy_fetch_uri(mrb_state *mrb, const struct mrb_spdy_uri_t *uri)
+static mrb_value mrb_spdy_fetch_uri(mrb_state *mrb, 
+    const struct mrb_spdy_uri_t *uri)
 {
   spdylay_session_callbacks callbacks;
   int fd;
@@ -504,12 +543,14 @@ static mrb_value mrb_spdy_fetch_uri(mrb_state *mrb, const struct mrb_spdy_uri_t 
   }
   ssl_ctx = SSL_CTX_new(SSLv23_client_method());
   if(ssl_ctx == NULL) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_CTX_new: %S", mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_CTX_new: %S", 
+        mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
   }
   mrb_spdy_init_ssl_ctx(mrb, ssl_ctx, &spdy_proto_version);
   ssl = SSL_new(ssl_ctx);
   if(ssl == NULL) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_new: %S", mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "SSL_new: %S", 
+        mrb_str_new_cstr(mrb, ERR_error_string(ERR_get_error(), NULL)));
   }
   mrb_spdy_ssl_handshake(mrb, ssl, fd);
 
@@ -519,12 +560,16 @@ static mrb_value mrb_spdy_fetch_uri(mrb_state *mrb, const struct mrb_spdy_uri_t 
   mrb_spdy_make_non_block(mrb, fd);
   mrb_spdy_set_tcp_nodelay(mrb, fd);
 
-  mrb_hash_set(mrb, response, mrb_symbol_value(mrb_intern_cstr(mrb, "spdy_proto_version")), mrb_fixnum_value(spdy_proto_version));
+  mrb_hash_set(mrb, response, 
+      mrb_symbol_value(mrb_intern_cstr(mrb, "spdy_proto_version")), 
+      mrb_fixnum_value(spdy_proto_version));
   conn.mrb = mrb;
   conn.response = response;
-  rv = spdylay_session_client_new(&conn.session, spdy_proto_version, &callbacks, &conn);
+  rv = spdylay_session_client_new(&conn.session, spdy_proto_version, &callbacks, 
+      &conn);
   if(rv != 0) {
-    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_session_client_new: %S", mrb_fixnum_value(rv));
+    mrb_raisef(mrb, E_RUNTIME_ERROR, "spdylay_session_client_new: %S", 
+        mrb_fixnum_value(rv));
   }
 
   mrb_spdy_submit_request(mrb, &conn, &req);
@@ -532,10 +577,12 @@ static mrb_value mrb_spdy_fetch_uri(mrb_state *mrb, const struct mrb_spdy_uri_t 
   pollfds[0].fd = fd;
   mrb_spdy_ctl_poll(mrb, pollfds, &conn);
 
-  while(spdylay_session_want_read(conn.session) || spdylay_session_want_write(conn.session)) {
+  while(spdylay_session_want_read(conn.session) 
+      || spdylay_session_want_write(conn.session)) {
     int nfds = poll(pollfds, npollfds, -1);
     if(nfds == -1) {
-      mrb_raisef(mrb, E_RUNTIME_ERROR, "poll: %S", mrb_str_new_cstr(mrb, strerror(errno)));
+      mrb_raisef(mrb, E_RUNTIME_ERROR, "poll: %S", 
+          mrb_str_new_cstr(mrb, strerror(errno)));
     } 
     if(pollfds[0].revents & (POLLIN | POLLOUT)) {
       mrb_spdy_exec_io(mrb, &conn);
