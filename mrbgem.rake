@@ -11,7 +11,7 @@ MRuby::Gem::Specification.new('mruby-spdy') do |spec|
   spdylay_lib = "#{build_dir}/spdylay/lib/.libs"
   libspdylaya = "#{spdylay_lib}/libspdylay.a"
   if ENV['SPDYLAY_CURRENT'] != "true"
-    spdylay_ver = "0daafd53e4d3063f5bb602e0f7b3809133226b5e"
+    spdylay_ver = "0c6e2dfb39f1f602a11daba594a30015a8318fb3"
   end
 
   def run_command env, command
