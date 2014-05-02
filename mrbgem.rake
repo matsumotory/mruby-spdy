@@ -10,7 +10,7 @@ MRuby::Gem::Specification.new('mruby-spdy') do |spec|
   spdylay_dir = "#{build_dir}/spdylay"
   spdylay_lib = "#{build_dir}/spdylay/lib/.libs"
   libspdylaya = "#{spdylay_lib}/libspdylay.a"
-  if ! ENV['SPDYLAY_CURRENT'] 
+  if ENV['SPDYLAY_CURRENT'] != "true"
     spdylay_ver = "0daafd53e4d3063f5bb602e0f7b3809133226b5e"
   end
 
@@ -35,7 +35,7 @@ MRuby::Gem::Specification.new('mruby-spdy') do |spec|
   if ! File.exists? libspdylaya
     Dir.chdir spdylay_dir do
       e = {}
-    if ! ENV['SPDYLAY_CURRENT'] 
+    if ENV['SPDYLAY_CURRENT'] != "true"
       run_command e, "git checkout #{spdylay_ver} ."
     end
       run_command e, 'git submodule init'

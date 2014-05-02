@@ -6,14 +6,15 @@ before_install:
   - sudo apt-get -qq update
 install:
   - sudo apt-get -qq install rake bison git gperf
+env:
+  - SPDYLAY_CURRENT=true
+  - SPDYLAY_CURRENT=false
 before_script:
   - cd ../
   - git clone https://github.com/mruby/mruby.git
   - cd mruby
   - cp -fp ../mruby-spdy/.travis_build_config.rb build_config.rb
 script: 
-  - rake SPDYLAY_CURRENT="true" all test
-  - rake clean
   - rake all test
 notifications:
   webhooks:
