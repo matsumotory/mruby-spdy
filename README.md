@@ -1,4 +1,4 @@
-# SPDY Module for mruby  [![Build Status](https://travis-ci.org/matsumoto-r/mruby-spdy.png?branch=master)](https://travis-ci.org/matsumoto-r/mruby-spdy)
+# SPDY Module for mruby  [![Build Status](https://travis-ci.org/matsumotory/mruby-spdy.png?branch=master)](https://travis-ci.org/matsumotory/mruby-spdy)
 SPDY module for mruby using [spdylay](https://github.com/tatsuhiro-t/spdylay). You can access Web site using SPDY protocol from mruby applications or devices with mruby.
 
 - [SPDY: An experimental protocol for a faster web](http://www.chromium.org/spdy/spdy-whitepaper) 
